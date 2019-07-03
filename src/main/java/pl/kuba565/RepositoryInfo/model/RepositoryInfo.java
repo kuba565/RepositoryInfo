@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 // TODO: @Builder lets you automatically produce the code required to have your class be instantiable with code such as:
-//Person.builder().name("Adam Savage").city("San Francisco").job("Mythbusters").job("Unchained Reaction").build();
+//RepositoryInfo.builder().name("Adam Savage").city("San Francisco").job("Mythbusters").job("Unchained Reaction").build();
 
 // or functional interface in controller
 public class RepositoryInfo {
