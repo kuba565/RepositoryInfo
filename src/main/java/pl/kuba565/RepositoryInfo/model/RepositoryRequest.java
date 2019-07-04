@@ -2,17 +2,15 @@ package pl.kuba565.RepositoryInfo.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
+import org.springframework.validation.annotation.Validated;
 
 @Data
 @AllArgsConstructor
+@Validated
 public class RepositoryRequest {
-    @NotNull
-    @NotBlank
+    @NonNull
     private String owner;
-    @NotNull
-    @NotBlank
+    @NonNull
     private String repositoryName;
 }

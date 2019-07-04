@@ -46,11 +46,11 @@ public class GithubRepositoryInfoGetterITest {
         RepositoryRequest repositoryRequest = new RepositoryRequest(null, "Allegro");
 
         //when
-        Exception exception = Assertions.assertThrows(
-                ConstraintViolationException.class,
+        NullPointerException exception = Assertions.assertThrows(
+                NullPointerException.class,
                 () -> githubRepositoryInfoGetter.getRepository(repositoryRequest)
         );
-        Assertions.assertEquals("getRepository.owner: must not be blank", exception.getMessage());
+        Assertions.assertEquals("owner is marked @NonNull but is null", exception.getMessage());
 
     }
 }
