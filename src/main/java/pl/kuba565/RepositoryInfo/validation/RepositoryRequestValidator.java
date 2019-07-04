@@ -1,10 +1,12 @@
 package pl.kuba565.RepositoryInfo.validation;
 
+import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import pl.kuba565.RepositoryInfo.model.RepositoryRequest;
 
+@Service
 public class RepositoryRequestValidator implements Validator {
     @Override
     public boolean supports(Class<?> aClass) {

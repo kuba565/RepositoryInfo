@@ -1,6 +1,7 @@
 package pl.kuba565.RepositoryInfo.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -26,26 +27,21 @@ public class RepositoryInfoController {
     private final GithubRepositoryInfoGetter githubRepositoryInfoGetter;
     private final RepositoryInfoDTOToRepositoryInfoTransformer repositoryInfoDTOToRepositoryInfoTransformer;
     private final RepositoryInfoMapper repositoryInfoMapper;
-    private final RepositoryRequestValidator repositoryRequestValidator;
 
     public RepositoryInfoController(
             GithubRepositoryInfoGetter githubRepositoryInfoGetter,
             RepositoryInfoMapper repositoryInfoMapper,
-            RepositoryInfoDTOToRepositoryInfoTransformer repositoryInfoDTOToRepositoryInfoTransformer,
-            RepositoryRequestValidator repositoryRequestValidator
+            RepositoryInfoDTOToRepositoryInfoTransformer repositoryInfoDTOToRepositoryInfoTransformer
     ) {
         this.githubRepositoryInfoGetter = githubRepositoryInfoGetter;
         this.repositoryInfoMapper = repositoryInfoMapper;
         this.repositoryInfoDTOToRepositoryInfoTransformer = repositoryInfoDTOToRepositoryInfoTransformer;
-        this.repositoryRequestValidator = repositoryRequestValidator;
     }
 
     @GetMapping("repositories/{owner}/{repository-name}")
     public ResponseEntity<RepositoryInfo> getRepository(@PathVariable(value = "owner") @NotBlank @NotNull String owner, @PathVariable(value = "repository-name") @NotNull @NotBlank String repositoryName) {
         RepositoryRequest repositoryRequest = new RepositoryRequest(owner, repositoryName);
 
-        //TODO: validation
-        repositoryRequestValidator.validate(repositoryRequest, result);
         RepositoryInfoDTO repositoryInfoDTO = githubRepositoryInfoGetter.getRepository(repositoryRequest);
 
 //        RepositoryInfo repositoryInfo = repositoryInfoMapper.mapRepositoryInfo(repositoryInfoDTO);
