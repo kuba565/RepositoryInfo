@@ -7,6 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.kuba565.RepositoryInfo.client.HttpClient;
 import pl.kuba565.RepositoryInfo.model.RepositoryInfoDTO;
+import pl.kuba565.RepositoryInfo.model.RepositoryRequest;
+
+import javax.validation.ConstraintViolationException;
 
 
 @RunWith(SpringRunner.class)
@@ -18,6 +21,7 @@ public class GithubRepositoryInfoGetterITest {
         //given
         HttpClient httpClient = new HttpClient();
         RepositoryInfoGetter githubRepositoryInfoGetter = new GithubRepositoryInfoGetter(httpClient);
+        RepositoryRequest repositoryRequest = new RepositoryRequest("kuba565", "Allegro");
 
         RepositoryInfoDTO expectedRepositoryInfoDTO =
                 new RepositoryInfoDTO("kuba565/Allegro",
@@ -28,9 +32,25 @@ public class GithubRepositoryInfoGetterITest {
                 );
 
         //when
-        RepositoryInfoDTO result = githubRepositoryInfoGetter.getRepository("kuba565", "Allegro");
+        RepositoryInfoDTO result = githubRepositoryInfoGetter.getRepository(repositoryRequest);
 
         //then
         Assertions.assertEquals(result, expectedRepositoryInfoDTO);
+    }
+
+    @Test
+    public void shouldThrowConstraintViolationExceptionWhenOwnerBlank() {
+        //given
+        HttpClient httpClient = new HttpClient();
+        RepositoryInfoGetter githubRepositoryInfoGetter = new GithubRepositoryInfoGetter(httpClient);
+        RepositoryRequest repositoryRequest = new RepositoryRequest(null, "Allegro");
+
+        //when
+        Exception exception = Assertions.assertThrows(
+                ConstraintViolationException.class,
+                () -> githubRepositoryInfoGetter.getRepository(repositoryRequest)
+        );
+        Assertions.assertEquals("getRepository.owner: must not be blank", exception.getMessage());
+
     }
 }

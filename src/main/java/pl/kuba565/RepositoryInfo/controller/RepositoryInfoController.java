@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.kuba565.RepositoryInfo.model.RepositoryInfo;
 import pl.kuba565.RepositoryInfo.model.RepositoryInfoDTO;
+import pl.kuba565.RepositoryInfo.model.RepositoryRequest;
 import pl.kuba565.RepositoryInfo.service.GithubRepositoryInfoGetter;
 import pl.kuba565.RepositoryInfo.service.RepositoryInfoDTOToRepositoryInfoTransformer;
 import pl.kuba565.RepositoryInfo.service.RepositoryInfoMapper;
@@ -34,8 +35,9 @@ public class RepositoryInfoController {
     }
 
     @GetMapping("repositories/{owner}/{repository-name}")
-    public ResponseEntity<RepositoryInfo> getRepository(@PathVariable(value = "owner") @NotBlank String owner, @PathVariable(value = "repository-name") @NotBlank String repositoryName) {
-        RepositoryInfoDTO repositoryInfoDTO = githubRepositoryInfoGetter.getRepository(owner, repositoryName);
+    public ResponseEntity<RepositoryInfo> getRepository(@PathVariable(value = "owner") @NotBlank @NotNull String owner, @PathVariable(value = "repository-name") @NotNull @NotBlank String repositoryName) {
+        RepositoryRequest repositoryRequest = new RepositoryRequest(owner, repositoryName);
+        RepositoryInfoDTO repositoryInfoDTO = githubRepositoryInfoGetter.getRepository(repositoryRequest);
 
 //        RepositoryInfo repositoryInfo = repositoryInfoMapper.mapRepositoryInfo(repositoryInfoDTO);
         RepositoryInfo repositoryInfo = repositoryInfoDTOToRepositoryInfoTransformer.apply(repositoryInfoDTO);
