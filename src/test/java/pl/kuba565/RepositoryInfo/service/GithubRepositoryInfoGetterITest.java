@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.kuba565.RepositoryInfo.client.HttpClient;
 import pl.kuba565.RepositoryInfo.exception.ValidationException;
-import pl.kuba565.RepositoryInfo.model.RepositoryInfoDTO;
+import pl.kuba565.RepositoryInfo.model.RepositoryInfo;
 import pl.kuba565.RepositoryInfo.model.RepositoryRequest;
 import pl.kuba565.RepositoryInfo.validation.RepositoryRequestValidator;
 
@@ -21,11 +21,14 @@ public class GithubRepositoryInfoGetterITest {
         //given
         HttpClient httpClient = new HttpClient();
         RepositoryRequestValidator repositoryRequestValidator = new RepositoryRequestValidator();
-        RepositoryInfoGetter githubRepositoryInfoGetter = new GithubRepositoryInfoGetter(httpClient, repositoryRequestValidator);
+        RepositoryInfoDTOToRepositoryInfoTransformer repositoryInfoDTOToRepositoryInfoTransformer = new RepositoryInfoDTOToRepositoryInfoTransformer();
+
+        RepositoryInfoGetter githubRepositoryInfoGetter =
+                new GithubRepositoryInfoGetter(httpClient, repositoryRequestValidator, repositoryInfoDTOToRepositoryInfoTransformer);
         RepositoryRequest repositoryRequest = new RepositoryRequest("kuba565", "Allegro");
 
-        RepositoryInfoDTO expectedRepositoryInfoDTO =
-                new RepositoryInfoDTO("kuba565/Allegro",
+        RepositoryInfo expectedRepositoryInfo =
+                new RepositoryInfo("kuba565/Allegro",
                         "Summer e-Xperience 2019",
                         "https://github.com/kuba565/Allegro.git",
                         0,
@@ -33,7 +36,7 @@ public class GithubRepositoryInfoGetterITest {
                 );
 
         //when
-        RepositoryInfoDTO result = null;
+        RepositoryInfo result = null;
         try {
             result = githubRepositoryInfoGetter.getRepository(repositoryRequest);
         } catch (ValidationException e) {
@@ -41,7 +44,7 @@ public class GithubRepositoryInfoGetterITest {
         }
 
         //then
-        Assertions.assertEquals(result, expectedRepositoryInfoDTO);
+        Assertions.assertEquals(result, expectedRepositoryInfo);
     }
 
     @Test
@@ -49,7 +52,10 @@ public class GithubRepositoryInfoGetterITest {
         //given
         HttpClient httpClient = new HttpClient();
         RepositoryRequestValidator repositoryRequestValidator = new RepositoryRequestValidator();
-        RepositoryInfoGetter githubRepositoryInfoGetter = new GithubRepositoryInfoGetter(httpClient, repositoryRequestValidator);
+        RepositoryInfoDTOToRepositoryInfoTransformer repositoryInfoDTOToRepositoryInfoTransformer = new RepositoryInfoDTOToRepositoryInfoTransformer();
+
+        RepositoryInfoGetter githubRepositoryInfoGetter =
+                new GithubRepositoryInfoGetter(httpClient, repositoryRequestValidator, repositoryInfoDTOToRepositoryInfoTransformer);
         RepositoryRequest repositoryRequest = new RepositoryRequest(null, "Allegro");
 
         //when
@@ -67,7 +73,10 @@ public class GithubRepositoryInfoGetterITest {
         //given
         HttpClient httpClient = new HttpClient();
         RepositoryRequestValidator repositoryRequestValidator = new RepositoryRequestValidator();
-        RepositoryInfoGetter githubRepositoryInfoGetter = new GithubRepositoryInfoGetter(httpClient, repositoryRequestValidator);
+        RepositoryInfoDTOToRepositoryInfoTransformer repositoryInfoDTOToRepositoryInfoTransformer = new RepositoryInfoDTOToRepositoryInfoTransformer();
+
+        RepositoryInfoGetter githubRepositoryInfoGetter =
+                new GithubRepositoryInfoGetter(httpClient, repositoryRequestValidator, repositoryInfoDTOToRepositoryInfoTransformer);
         RepositoryRequest repositoryRequest = new RepositoryRequest("kuba565", "");
 
         //when

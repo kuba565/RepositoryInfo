@@ -6,7 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import pl.kuba565.RepositoryInfo.client.HttpClient;
 import pl.kuba565.RepositoryInfo.exception.ValidationException;
-import pl.kuba565.RepositoryInfo.model.RepositoryInfoDTO;
+import pl.kuba565.RepositoryInfo.model.RepositoryInfo;
 import pl.kuba565.RepositoryInfo.model.RepositoryRequest;
 import pl.kuba565.RepositoryInfo.util.UrlUtil;
 import pl.kuba565.RepositoryInfo.validation.RepositoryRequestValidator;
@@ -17,25 +17,29 @@ import java.util.List;
 public class GithubRepositoryInfoGetter implements RepositoryInfoGetter {
     private HttpClient httpClient;
     private RepositoryRequestValidator repositoryRequestValidator;
+    private RepositoryInfoDTOToRepositoryInfoTransformer repositoryInfoDTOToRepositoryInfoTransformer;
 
-    public GithubRepositoryInfoGetter(HttpClient httpClient, RepositoryRequestValidator repositoryRequestValidator) {
+    public GithubRepositoryInfoGetter(HttpClient httpClient,
+                               RepositoryRequestValidator repositoryRequestValidator,
+                               RepositoryInfoDTOToRepositoryInfoTransformer repositoryInfoDTOToRepositoryInfoTransformer) {
         this.httpClient = httpClient;
         this.repositoryRequestValidator = repositoryRequestValidator;
+        this.repositoryInfoDTOToRepositoryInfoTransformer = repositoryInfoDTOToRepositoryInfoTransformer;
     }
 
-    public RepositoryInfoDTO getRepository(RepositoryRequest repositoryRequest) {
-        Errors errors = new BeanPropertyBindingResult(repositoryRequest, "repositoryRequest");
+    public RepositoryInfo getRepository(RepositoryRequest repositoryRequest) {
+        List<ObjectError> errors = validate(repositoryRequest);
+        if (errors.size() > 0) {
+            throw new ValidationException(errors);
+        } else {
+            return repositoryInfoDTOToRepositoryInfoTransformer.apply(httpClient.get(UrlUtil.getUrl(repositoryRequest)));
+        }
+    }
 
+    private List<ObjectError> validate(RepositoryRequest repositoryRequest) {
+        Errors errors = new BeanPropertyBindingResult(repositoryRequest, "repositoryRequest");
         repositoryRequestValidator.validate(repositoryRequest, errors);
 
-        List<ObjectError> allErrors = errors.getAllErrors();
-
-        if (allErrors.size() > 0) {
-            throw new ValidationException(allErrors);
-        } else {
-            String URL = UrlUtil.getUrl(repositoryRequest);
-            return httpClient.get(URL);
-        }
-
+        return errors.getAllErrors();
     }
 }
