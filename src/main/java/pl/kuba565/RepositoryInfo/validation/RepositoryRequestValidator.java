@@ -15,9 +15,7 @@ public class RepositoryRequestValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        RepositoryRequest repositoryRequest = (RepositoryRequest) o;
-
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, ((RepositoryRequest) o).getOwner(), "owner is null or whitespace");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, ((RepositoryRequest) o).getOwner(), "owner is null or whitespace");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "owner", "owner is null or whitespace");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "repositoryName", "repositoryName is null or whitespace");
     }
 }

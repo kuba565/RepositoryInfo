@@ -6,10 +6,10 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.kuba565.RepositoryInfo.client.HttpClient;
+import pl.kuba565.RepositoryInfo.exception.ValidationException;
 import pl.kuba565.RepositoryInfo.model.RepositoryInfoDTO;
 import pl.kuba565.RepositoryInfo.model.RepositoryRequest;
-
-import javax.validation.ConstraintViolationException;
+import pl.kuba565.RepositoryInfo.validation.RepositoryRequestValidator;
 
 
 @RunWith(SpringRunner.class)
@@ -20,7 +20,8 @@ public class GithubRepositoryInfoGetterITest {
     public void shouldGetRepository() {
         //given
         HttpClient httpClient = new HttpClient();
-        RepositoryInfoGetter githubRepositoryInfoGetter = new GithubRepositoryInfoGetter(httpClient);
+        RepositoryRequestValidator repositoryRequestValidator = new RepositoryRequestValidator();
+        RepositoryInfoGetter githubRepositoryInfoGetter = new GithubRepositoryInfoGetter(httpClient, repositoryRequestValidator);
         RepositoryRequest repositoryRequest = new RepositoryRequest("kuba565", "Allegro");
 
         RepositoryInfoDTO expectedRepositoryInfoDTO =
@@ -32,25 +33,50 @@ public class GithubRepositoryInfoGetterITest {
                 );
 
         //when
-        RepositoryInfoDTO result = githubRepositoryInfoGetter.getRepository(repositoryRequest);
+        RepositoryInfoDTO result = null;
+        try {
+            result = githubRepositoryInfoGetter.getRepository(repositoryRequest);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
 
         //then
         Assertions.assertEquals(result, expectedRepositoryInfoDTO);
     }
 
     @Test
-    public void shouldThrowConstraintViolationExceptionWhenOwnerBlank() {
+    public void shouldThrowValidationExceptionWhenOwnerBlank() {
         //given
         HttpClient httpClient = new HttpClient();
-        RepositoryInfoGetter githubRepositoryInfoGetter = new GithubRepositoryInfoGetter(httpClient);
+        RepositoryRequestValidator repositoryRequestValidator = new RepositoryRequestValidator();
+        RepositoryInfoGetter githubRepositoryInfoGetter = new GithubRepositoryInfoGetter(httpClient, repositoryRequestValidator);
         RepositoryRequest repositoryRequest = new RepositoryRequest(null, "Allegro");
 
         //when
-        NullPointerException exception = Assertions.assertThrows(
-                NullPointerException.class,
+
+        ValidationException exception = Assertions.assertThrows(
+                ValidationException.class,
                 () -> githubRepositoryInfoGetter.getRepository(repositoryRequest)
         );
-        Assertions.assertEquals("owner is marked @NonNull but is null", exception.getMessage());
+        Assertions.assertEquals("owner is null or whitespace", exception.getMessage());
+
+    }
+
+    @Test
+    public void shouldThrowValidationExceptionWhenRepositoryNameBlank() {
+        //given
+        HttpClient httpClient = new HttpClient();
+        RepositoryRequestValidator repositoryRequestValidator = new RepositoryRequestValidator();
+        RepositoryInfoGetter githubRepositoryInfoGetter = new GithubRepositoryInfoGetter(httpClient, repositoryRequestValidator);
+        RepositoryRequest repositoryRequest = new RepositoryRequest("kuba565", "");
+
+        //when
+
+        ValidationException exception = Assertions.assertThrows(
+                ValidationException.class,
+                () -> githubRepositoryInfoGetter.getRepository(repositoryRequest)
+        );
+        Assertions.assertEquals("repositoryName is null or whitespace", exception.getMessage());
 
     }
 }
