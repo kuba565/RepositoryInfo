@@ -1,6 +1,12 @@
-package pl.kuba565.RepositoryInfo.model;
+package pl.kuba565.repositoryInfo.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RepositoryInfo {
