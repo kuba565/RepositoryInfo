@@ -1284,3 +1284,16 @@ java.lang.IllegalStateException: No cache could be resolved for 'Builder[public 
 2019-07-09 14:06:40.772  INFO 4764 --- [http-nio-8080-exec-1] p.k.repositoryInfo.aspect.LogAspect      : [METRICS] --------------------> RepositoryInfoController.getRepository(..), time: 660 milliseconds 
 2019-07-09 14:07:34.687  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : [METHOD] --------> ServiceConfig.clearRepositoriesCache()
 2019-07-09 14:07:34.687  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : ---CACHE CLEARED---
+2019-07-09 14:07:34.688  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : [METRICS] --------------------> ServiceConfig.clearRepositoriesCache(), time: 0 milliseconds 
+2019-07-09 14:08:34.686  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : [METHOD] --------> ServiceConfig.clearRepositoriesCache()
+2019-07-09 14:08:34.686  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : ---CACHE CLEARED---
+2019-07-09 14:08:34.686  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : [METRICS] --------------------> ServiceConfig.clearRepositoriesCache(), time: 0 milliseconds 
+2019-07-09 14:09:34.685  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : [METHOD] --------> ServiceConfig.clearRepositoriesCache()
+2019-07-09 14:09:34.685  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : ---CACHE CLEARED---
+2019-07-09 14:09:34.685  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : [METRICS] --------------------> ServiceConfig.clearRepositoriesCache(), time: 0 milliseconds 
+2019-07-09 14:10:34.683  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : [METHOD] --------> ServiceConfig.clearRepositoriesCache()
+2019-07-09 14:10:34.684  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : ---CACHE CLEARED---
+2019-07-09 14:10:34.684  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : [METRICS] --------------------> ServiceConfig.clearRepositoriesCache(), time: 0 milliseconds 
+2019-07-09 14:11:34.680  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : [METHOD] --------> ServiceConfig.clearRepositoriesCache()
+2019-07-09 14:11:34.680  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : ---CACHE CLEARED---
+2019-07-09 14:11:34.680  INFO 4764 --- [scheduling-1] p.k.repositoryInfo.aspect.LogAspect      : [METRICS] --------------------> ServiceConfig.clearRepositoriesCache(), time: 0 milliseconds 
